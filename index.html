@@ -23,18 +23,38 @@
                 top: 0; right: 0; bottom: 0; width: 100%"></div>
             </div>
             <!-- timer -->
-            <div style="
+            <div 
+            id = "timer";
+            style="
                 background-color: red; 
                 width: 100px; 
                 height: 100px; 
                 flex-shrink: 0;
-            "></div>
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            ">
+            60
+            </div>
             <!-- enemy health -->
             <div style="position: relative; height: 30px; width: 100%;">
                 <div style="height: 30px; background-color: yellow; width: 100%"></div>
                 <div id ="enemyHealth"; style="position: absolute; background: blue; 
                 top: 0; right: 0; left:0; bottom: 0;"></div>
             </div>
+        </div>
+        <div id = "displayText"; style="
+            position: absolute; 
+            color: white; 
+            justify-content: center;
+            align-items: center;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: none;
+        ">
+            Tie
         </div>
         <canvas></canvas>
     </div>
