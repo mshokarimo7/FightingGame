@@ -1,20 +1,60 @@
 class Sprite {
-    constructor({position, imageSrc}) {
+    constructor({position, imageSrc, scale = 1, framesMax = 1}) {
         this.position = position
         this.width = 50
         this.height = 150
         this.image = new Image()
         this.image.src = imageSrc
+        this.scale = scale
+        /* we are also creating a framesMax variable since we have a single class for 
+        both background and shop. Since we want to cut out the shop in segments of 1/6th,
+        we implemented a way of cutting out segments of the whole image in the c.drawImage 
+        function. This cutting then also affects the background and essentially cuts the 
+        background image into 6 parts, thus drawing only the 1/6th part of the image. To 
+        avoid this, framesMax is created to cut out the necessary images into the amount of 
+        frames within a respective image input. */
+        this.framesMax = framesMax 
+        this.framesCurrent = 0
+        this.framesElapsed = 0
+        this.framesHold = 5
     }
 
     draw(){
-        c.drawImage(this.image, this.position.x, this.position.y)
+        c.drawImage(this.image, 
+            this.framesCurrent * (this.image.width/this.framesMax), // x crop location
+            0,                                                      // y crop location
+            // making sure we crop out the first frame, since there are 6 frames
+            this.image.width / this.framesMax,                      // x crop width
+            this.image.height,                                      // y crop width
+
+            this.position.x, 
+            this.position.y, 
+            /* making sure we set the width of the draw to 1/6th of the whole wide image
+            if we don't, we will end up stretching the shop to the full width of the 
+            inputted wide image with the 6 animations/shops */
+            (this.image.width / this.framesMax) * this.scale, // x draw width 
+            this.image.height * this.scale)                   // y draw width
     }
 
     update(){
         this.draw()
+        this.framesElapsed++
+
+        if(this.framesElapsed % this.framesHold === 0){
+            /* subtracting 1 so that if we only have framesMax == 1, then we dont cut out 
+            the background from 1024th pixel in the x direction
+            in case of 6 frames, we then have 5, and it draws 0, 1, 2, 3, 4, 5 with the 5th 
+            frame being the last iteration of the "this.framesCurrent++" happening */
+            if(this.framesCurrent < this.framesMax - 1){
+                this.framesCurrent++
+            }
+            else{
+                this.framesCurrent = 0
+            }
+        }
     }
 }
+
 
 class Fighter {
     constructor({position, velocity, color = 'red', offset}) {
@@ -62,7 +102,7 @@ class Fighter {
         this.position.y += this.velocity.y
 
         // gravity 
-        if(this.position.y + this.height + this.velocity.y >= canvas.height){
+        if(this.position.y + this.height + this.velocity.y >= canvas.height - 96){
             this.velocity.y = 0
         } else {
             this.velocity.y += gravity
