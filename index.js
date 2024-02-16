@@ -31,7 +31,11 @@ const player = new Fighter(
         position: {x: 0, y: 0},
         velocity: {x: 0, y: 0},
         color: 'red',
-        offset: {x: 0, y: 0}
+        offset: {x: 0, y: 0},
+        imageSrc: "./img/samuraiMack/Idle.png",
+        framesMax: 8,
+        scale: 2.5,
+        offset: {x: 215, y: 155}
     }  
 )
 const enemy = new Fighter(
@@ -80,7 +84,7 @@ function animate(){
 
     // rendering player and enemy 
     player.update()
-    enemy.update()
+    //enemy.update()
 
     // player movement
     player.velocity.x = 0
