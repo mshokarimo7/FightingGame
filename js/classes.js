@@ -121,6 +121,7 @@ class Fighter extends Sprite {
     }
 
     attack(){
+        this.switchSprite('attack1')
         this.isAttacking = true
         /* 
         using a timer so that the attack goes for 100 miliseconds and the sword
@@ -133,6 +134,13 @@ class Fighter extends Sprite {
     }
 
     switchSprite(sprite){
+        /* making sure the attack goes through all the animation frames, before
+        we continue over to the switch statement to check for other actions 
+        */
+        if(this.image === this.sprites.attack1.image && 
+            this.framesCurrent < this.sprites.attack1.framesMax - 1){
+            return
+        }
         switch(sprite){
             case 'idle':
                 if(this.image !== this.sprites.idle.image){
@@ -159,6 +167,13 @@ class Fighter extends Sprite {
                 if(this.image != this.sprites.fall.image){
                     this.image = this.sprites.fall.image
                     this.framesMax = this.sprites.fall.framesMax
+                    this.framesCurrent = 0
+                }
+                break
+            case 'attack1':
+                if(this.image != this.sprites.attack1.image){
+                    this.image = this.sprites.attack1.image
+                    this.framesMax = this.sprites.attack1.framesMax
                     this.framesCurrent = 0
                 }
                 break
