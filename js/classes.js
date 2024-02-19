@@ -139,21 +139,33 @@ class Fighter extends Sprite {
         */
     }
 
+    takeHit(){
+        this.health -= 20
+        this.switchSprite('takeHit')
+    }
+
     switchSprite(sprite){
         /* making sure the attack goes through all the animation frames, before
         we continue over to the switch statement to check for other actions 
         */
         if(this.image === this.sprites.attack1.image && 
             this.framesCurrent < this.sprites.attack1.framesMax - 1){
-            return
+                return
         }
+
+        // overriding when figher gets hit 
+        if(this.image === this.sprites.takeHit.image &&
+            this.framesCurrent < this.sprites.takeHit.framesMax - 1){
+                return
+        }
+
+        // regular animation states 
         switch(sprite){
             case 'idle':
                 if(this.image !== this.sprites.idle.image){
                     this.image = this.sprites.idle.image
                     this.framesMax = this.sprites.idle.framesMax
                     this.framesCurrent = 0
-                    this.framesHold = 5
                 }
                 break
             case 'run':
@@ -161,7 +173,6 @@ class Fighter extends Sprite {
                     this.image = this.sprites.run.image
                     this.framesMax = this.sprites.run.framesMax
                     this.framesCurrent = 0
-                    this.framesHold = 5
                 }
                 break
             case 'jump':
@@ -169,7 +180,6 @@ class Fighter extends Sprite {
                     this.image = this.sprites.jump.image
                     this.framesMax = this.sprites.jump.framesMax
                     this.framesCurrent = 0
-                    this.framesHold = 5
                 }
                 break
             case 'fall':
@@ -177,14 +187,19 @@ class Fighter extends Sprite {
                     this.image = this.sprites.fall.image
                     this.framesMax = this.sprites.fall.framesMax
                     this.framesCurrent = 0
-                    this.framesHold = 5
                 }
                 break
             case 'attack1':
                 if(this.image != this.sprites.attack1.image){
                     this.image = this.sprites.attack1.image
                     this.framesMax = this.sprites.attack1.framesMax
-                    this.framesHold = 5
+                    this.framesCurrent = 0
+                }
+                break
+            case 'takeHit':
+                if(this.image != this.sprites.takeHit.image){
+                    this.image = this.sprites.takeHit.image
+                    this.framesMax = this.sprites.takeHit.framesMax
                     this.framesCurrent = 0
                 }
                 break
