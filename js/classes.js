@@ -28,8 +28,8 @@ class Sprite {
             this.image.width / this.framesMax,                      // x crop width
             this.image.height,                                      // y crop height
 
-            this.position.x - this.offset.x, 
-            this.position.y - this.offset.y, 
+            this.position.x - this.offset.x,
+            this.position.y - this.offset.y,
             /* making sure we set the width of the draw to 1/6th of the whole wide image
             if we don't, we will end up stretching the shop to the full width of the 
             inputted wide image(with the 6 animations/shops) */
@@ -62,7 +62,9 @@ class Sprite {
 
 class Fighter extends Sprite {
     constructor({position, velocity, color = 'red', imageSrc, scale = 1, 
-    framesMax = 1, offset = {x: 0, y: 0}, sprites}) {
+    framesMax = 1, offset = {x: 0, y: 0}, sprites,
+    attackBox = {offset:{}, width: undefined, height: undefined}
+    }) {
         // calling the constructor of the parent i.e. Sprite
         super({
             position,
@@ -80,9 +82,9 @@ class Fighter extends Sprite {
                 x: this.position.x,
                 y: this.position.y
             },
-            offset: offset,
-            width: 100,
-            height: 50,
+            offset: attackBox.offset,
+            width: attackBox.width,
+            height: attackBox.height,
         }
         this.color = color
         this.isAttacking
@@ -100,12 +102,19 @@ class Fighter extends Sprite {
     }
 
     update(){
-        // making sure the attack boxes are following their parent (i.e. player)
-        this.attackBox.position.x = this.position.x + this.attackBox.offset.x
-        this.attackBox.position.y = this.position.y
-
+        
         this.draw()
         this.animateFrames()
+
+        // making sure the attack boxes are following their parent (i.e. player)
+        this.attackBox.position.x = this.position.x + this.attackBox.offset.x
+        this.attackBox.position.y = this.position.y + this.attackBox.offset.y 
+
+        // drawing the attack box
+        /*c.fillRect(this.attackBox.position.x, this.attackBox.position.y, 
+            this.attackBox.width,
+            this.attackBox.height)*/
+
 
         // movement 
         this.position.x += this.velocity.x
@@ -128,9 +137,6 @@ class Fighter extends Sprite {
         is drawn back, if we didnt do this then the player would be in attack state 
         until the sword collides with the enemy 
         */
-        setTimeout(() => {
-            this.isAttacking = false
-        }, 100);
     }
 
     switchSprite(sprite){
@@ -178,7 +184,7 @@ class Fighter extends Sprite {
                 if(this.image != this.sprites.attack1.image){
                     this.image = this.sprites.attack1.image
                     this.framesMax = this.sprites.attack1.framesMax
-                    this.framesHold = 4
+                    this.framesHold = 5
                     this.framesCurrent = 0
                 }
                 break
