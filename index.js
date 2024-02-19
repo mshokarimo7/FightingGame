@@ -60,12 +60,39 @@ const player = new Fighter(
         }
     }  
 )
+
 const enemy = new Fighter(
     {
         position: {x: 350, y: 100},
         velocity: {x: 0, y: 0},
         color: 'blue',
-        offset: {x: -50, y: 0}
+        offset: {x: -50, y: 0},
+        imageSrc: "./img/kenji/Idle.png",
+        framesMax: 4,
+        scale: 2.5,
+        offset: {x: 215, y: 170},
+        sprites: {
+            idle: {
+                imageSrc: "./img/kenji/Idle.png",
+                framesMax: 4
+            },
+            run: {
+                imageSrc: "./img/kenji/Run.png",
+                framesMax: 8
+            },
+            jump: {
+                imageSrc: "./img/kenji/Jump.png",
+                framesMax: 2
+            },
+            fall: {
+                imageSrc: "./img/kenji/Fall.png",
+                framesMax: 2
+            },
+            attack1: {
+                imageSrc: "./img/kenji/Attack1.png",
+                framesMax: 4
+            }
+        }
     }
 )
 
@@ -100,15 +127,15 @@ function animate(){
     c.fillStyle = "black"
     c.fillRect(0, 0, canvas.width, canvas.height)
 
-    // rendering background and shop
+    // rendering background and shop--------------------------------
     background.update()
     shop.update()
 
-    // rendering player and enemy 
+    // rendering player and enemy-----------------------------------
     player.update()
-    //enemy.update()
+    enemy.update()
 
-    // player movement
+    // player movement----------------------------------------------
     player.velocity.x = 0
     if(keys.a.pressed && player.lastKey === 'a'){
         player.velocity.x = -5
@@ -129,16 +156,28 @@ function animate(){
         player.switchSprite('fall')
     }
     
-    // enemy movement
+    // enemy movement------------------------------------------------
     enemy.velocity.x = 0
     if(keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
         enemy.velocity.x = -5
+        enemy.switchSprite('run')
     }
     else if(keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
         enemy.velocity.x = 5
+        enemy.switchSprite('run')
+    }
+    else{
+        enemy.switchSprite('idle')
+    }
+    // enemy jumping and falling
+    if (enemy.velocity.y < 0 ){
+        enemy.switchSprite('jump')
+    }
+    else if (enemy.velocity.y > 0){
+        enemy.switchSprite('fall')
     }
 
-    // detecting attack collisions, player on enemy
+    // detecting attack collisions, player on enemy----------------
     if(rectangularCollision({rectangle1: player, rectangle2: enemy}) && 
     player.isAttacking){
             player.isAttacking = false
@@ -146,7 +185,7 @@ function animate(){
             document.querySelector("#enemyHealth").style.width = enemy.health + "%"
     }
 
-    // detecting attack collisions, enemy on player
+    // detecting attack collisions, enemy on player----------------
     if(rectangularCollision({rectangle1: enemy, rectangle2: player}) && 
     enemy.isAttacking){
             enemy.isAttacking = false
@@ -154,7 +193,7 @@ function animate(){
             document.querySelector("#playerHealth").style.width = player.health + "%"
     }
 
-    // end game based on health 
+    // end game based on health------------------------------------
     if(enemy.health <= 0 || player.health <= 0){
         determineWinner({player: player, enemy: enemy, timerId: timerId})
     }
@@ -164,6 +203,7 @@ animate()
 
 window.addEventListener('keydown', (event) => {
     switch (event.key){
+        // player keys----------------------------------------------
         case 'd':
             keys.d.pressed = true
             player.lastKey = 'd'
@@ -181,7 +221,7 @@ window.addEventListener('keydown', (event) => {
             player.attack()
             break
 
-
+        // enemy keys----------------------------------------------
         case 'ArrowRight':
             keys.ArrowRight.pressed = true
             enemy.lastKey = 'ArrowRight'
@@ -203,6 +243,7 @@ window.addEventListener('keydown', (event) => {
 
 window.addEventListener('keyup', (event) => {
     switch (event.key){
+        // player keys----------------------------------------------
         case 'd':
             keys.d.pressed = false
             break
@@ -212,7 +253,7 @@ window.addEventListener('keyup', (event) => {
         case 'w':
             keys.w.pressed = false
             break
-        // enemy keys
+        // enemy keys-----------------------------------------------
         case 'ArrowRight':
             keys.ArrowRight.pressed = false
             break
