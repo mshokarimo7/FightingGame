@@ -144,7 +144,6 @@ const keys = {
     }
 }
 
-
 decreaseTimer()
 
 function animate(){
@@ -221,7 +220,7 @@ function animate(){
     player.isAttacking && player.framesCurrent === 4){
             enemy.takeHit()
             player.isAttacking = false
-            document.querySelector("#enemyHealth").style.width = enemy.health + "%"
+            gsap.to('#enemyHealth', {width: enemy.health + "%"})
     }
 
     // if player misses
@@ -234,7 +233,7 @@ function animate(){
     enemy.isAttacking && enemy.framesCurrent === 2){
             player.takeHit()
             enemy.isAttacking = false
-            document.querySelector("#playerHealth").style.width = player.health + "%"
+            gsap.to('#playerHealth', {width: player.health + "%"})
     }
 
     // if enemy misses
