@@ -155,6 +155,8 @@ function animate(){
     // rendering background and shop--------------------------------
     background.update()
     shop.update()
+    c.fillStyle = 'rgba(255, 255, 255, 0.04)'
+    c.fillRect(0, 0, canvas.width, canvas.height)
 
     // rendering player and enemy-----------------------------------
     player.update()
@@ -165,10 +167,16 @@ function animate(){
     if(keys.a.pressed && player.lastKey === 'a'){
         player.velocity.x = -5
         player.switchSprite('run')
+        if(player.dead){
+            player.velocity.x = 0
+        }
     }
     else if(keys.d.pressed && player.lastKey === 'd'){
         player.velocity.x = 5
         player.switchSprite('run')
+        if(player.dead){
+            player.velocity.x = 0
+        }
     }
     else{
         player.switchSprite('idle')
@@ -186,10 +194,16 @@ function animate(){
     if(keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
         enemy.velocity.x = -5
         enemy.switchSprite('run')
+        if(enemy.dead){
+            enemy.velocity.x = 0
+        }
     }
     else if(keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
         enemy.velocity.x = 5
         enemy.switchSprite('run')
+        if(enemy.dead){
+            enemy.velocity.x = 0
+        }
     }
     else{
         enemy.switchSprite('idle')
