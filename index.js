@@ -212,14 +212,14 @@ function animate(){
     
     // enemy movement------------------------------------------------
     enemy.velocity.x = 0
-    if(keys.ArrowLeft.pressed){
+    if(keys.ArrowLeft.pressed && !keys.ArrowRight.pressed){
         enemy.velocity.x = -5
         enemy.switchSprite('run')
         if(enemy.dead){
             enemy.velocity.x = 0
         }
     }
-    else if(keys.ArrowRight.pressed){
+    else if(keys.ArrowRight.pressed && !keys.ArrowLeft.pressed){
         enemy.velocity.x = 5
         enemy.switchSprite('run')
         if(enemy.dead){
