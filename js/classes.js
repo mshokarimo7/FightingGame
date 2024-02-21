@@ -132,8 +132,23 @@ class Fighter extends Sprite {
         }
     }
 
-    attack(){
-        this.switchSprite('attack1')
+    enemyAttack(){
+        if(this.velocity.x > 0){
+            this.switchSprite('AttackRight')
+        }
+        else {
+            this.switchSprite('AttackLeft')
+        }
+        this.isAttacking = true
+    }
+
+    playerAttack(){
+        if(this.velocity.x < 0){
+            this.switchSprite('AttackRight')
+        }
+        else {
+            this.switchSprite('AttackLeft')
+        }
         this.isAttacking = true
     }
 
@@ -152,8 +167,12 @@ class Fighter extends Sprite {
         /* making sure the attack goes through all the animation frames, before
         we continue over to the switch statement to check for other actions 
         */
-        if(this.image === this.sprites.attack1.image && 
-            this.framesCurrent < this.sprites.attack1.framesMax - 1){
+        if(this.image === this.sprites.AttackLeft.image && 
+            this.framesCurrent < this.sprites.AttackLeft.framesMax - 1){
+                return
+        }
+        else if(this.image === this.sprites.AttackRight.image && 
+            this.framesCurrent < this.sprites.AttackRight.framesMax - 1){
                 return
         }
 
@@ -203,10 +222,10 @@ class Fighter extends Sprite {
                     this.framesCurrent = 0
                 }
                 break
-            case 'attack1':
-                if(this.image != this.sprites.attack1.image){
-                    this.image = this.sprites.attack1.image
-                    this.framesMax = this.sprites.attack1.framesMax
+            case 'AttackLeft':
+                if(this.image != this.sprites.AttackLeft.image){
+                    this.image = this.sprites.AttackLeft.image
+                    this.framesMax = this.sprites.AttackLeft.framesMax
                     this.framesCurrent = 0
                 }
                 break
@@ -221,6 +240,20 @@ class Fighter extends Sprite {
                 if(this.image != this.sprites.death.image){
                     this.image = this.sprites.death.image
                     this.framesMax = this.sprites.death.framesMax
+                    this.framesCurrent = 0
+                }
+                break
+            case 'runRight':
+                if(this.image != this.sprites.runRight.image){
+                    this.image = this.sprites.runRight.image
+                    this.framesMax = this.sprites.runRight.framesMax
+                    this.framesCurrent = 0
+                }
+                break
+            case 'AttackRight':
+                if(this.image != this.sprites.AttackRight.image){
+                    this.image = this.sprites.AttackRight.image
+                    this.framesMax = this.sprites.AttackRight.framesMax
                     this.framesCurrent = 0
                 }
                 break

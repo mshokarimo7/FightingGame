@@ -53,7 +53,11 @@ const player = new Fighter(
                 imageSrc: "./img/samuraiMack/Fall.png",
                 framesMax: 2
             },
-            attack1: {
+            AttackRight: {
+                imageSrc: "./img/samuraiMack/Attack1.png",
+                framesMax: 6
+            },
+            AttackLeft: {
                 imageSrc: "./img/samuraiMack/Attack1.png",
                 framesMax: 6
             },
@@ -100,7 +104,11 @@ const enemy = new Fighter(
                 imageSrc: "./img/kenji/Fall.png",
                 framesMax: 2
             },
-            attack1: {
+            AttackRight: {
+                imageSrc: "./img/kenji/Attack1Right.png",
+                framesMax: 4
+            },
+            AttackLeft: {
                 imageSrc: "./img/kenji/Attack1.png",
                 framesMax: 4
             },
@@ -111,6 +119,11 @@ const enemy = new Fighter(
             death: {
                 imageSrc: "./img/kenji/Death.png",
                 framesMax: 7
+            },
+            // Animations for right side
+            runRight: {
+                imageSrc: "./img/kenji/RunRight.png",
+                framesMax: 8
             }
         },
         attackBox: {
@@ -221,7 +234,7 @@ function animate(){
     }
     else if(keys.ArrowRight.pressed && !keys.ArrowLeft.pressed){
         enemy.velocity.x = 5
-        enemy.switchSprite('run')
+        enemy.switchSprite('runRight')
         if(enemy.dead){
             enemy.velocity.x = 0
         }
@@ -231,7 +244,12 @@ function animate(){
     }
     // enemy jumping and falling
     if (enemy.velocity.y < 0 ){
-        enemy.switchSprite('jump')
+        if(enemy.velocity.x > 0){
+            enemy.switchSprite('jumpRight')
+        }
+        else{
+            enemy.switchSprite('jump')
+        }
     }
     else if (enemy.velocity.y > 0){
         enemy.switchSprite('fall')
@@ -289,7 +307,7 @@ window.addEventListener('keydown', (event) => {
                 player.lastKey = 'w'
                 break
             case ' ':
-                player.attack()
+                player.playerAttack()
                 break
         }
     }
@@ -311,7 +329,7 @@ window.addEventListener('keydown', (event) => {
                 enemy.lastKey = 'ArrowUp'
                 break
             case 'Enter':
-                enemy.attack()
+                enemy.enemyAttack()
                 break
         }
     }
