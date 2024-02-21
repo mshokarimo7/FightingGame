@@ -163,14 +163,35 @@ function animate(){
 
     // player movement----------------------------------------------
     player.velocity.x = 0
-    if(keys.a.pressed && player.lastKey === 'a'){
+    /*
+    switch(true){
+        case keys.a.pressed:
+            player.velocity.x = -5;
+            player.switchSprite('run');
+            if (player.dead) {
+                player.velocity.x = 0;
+            }
+            break;
+        case keys.d.pressed:
+            player.velocity.x = 5;
+            player.switchSprite('run');
+            if (player.dead) {
+                player.velocity.x = 0;
+            }
+            break;
+        default:
+            player.switchSprite('idle')
+    }
+    */
+    
+    if(keys.a.pressed && !keys.d.pressed){
         player.velocity.x = -5
         player.switchSprite('run')
         if(player.dead){
             player.velocity.x = 0
         }
     }
-    else if(keys.d.pressed && player.lastKey === 'd'){
+    else if(keys.d.pressed && !keys.a.pressed){
         player.velocity.x = 5
         player.switchSprite('run')
         if(player.dead){
@@ -180,6 +201,7 @@ function animate(){
     else{
         player.switchSprite('idle')
     }
+    
     // jumping and falling
     if (player.velocity.y < 0){
         player.switchSprite('jump')
@@ -190,14 +212,14 @@ function animate(){
     
     // enemy movement------------------------------------------------
     enemy.velocity.x = 0
-    if(keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
+    if(keys.ArrowLeft.pressed){
         enemy.velocity.x = -5
         enemy.switchSprite('run')
         if(enemy.dead){
             enemy.velocity.x = 0
         }
     }
-    else if(keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
+    else if(keys.ArrowRight.pressed){
         enemy.velocity.x = 5
         enemy.switchSprite('run')
         if(enemy.dead){
