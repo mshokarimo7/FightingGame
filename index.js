@@ -53,8 +53,12 @@ const player = new Fighter(
                 imageSrc: "./img/samuraiMack/RunLeft.png",
                 framesMax: 8
             },
-            jump: {
-                imageSrc: "./img/samuraiMack/Jump.png",
+            jumpRight: {
+                imageSrc: "./img/samuraiMack/JumpRight.png",
+                framesMax: 2
+            },
+            jumpLeft: {
+                imageSrc: "./img/samuraiMack/JumpLeft.png",
                 framesMax: 2
             },
             fall: {
@@ -114,8 +118,12 @@ const enemy = new Fighter(
                 imageSrc: "./img/kenji/RunLeft.png",
                 framesMax: 8
             },
-            jump: {
-                imageSrc: "./img/kenji/Jump.png",
+            jumpRight: {
+                imageSrc: "./img/kenji/JumpRight.png",
+                framesMax: 2
+            },
+            jumpLeft: {
+                imageSrc: "./img/kenji/JumpLeft.png",
                 framesMax: 2
             },
             fall: {
@@ -220,7 +228,12 @@ function animate(){
     
     // jumping and falling
     if (player.velocity.y < 0){
-        player.switchSprite('jump')
+        if(player.directionRight){
+            player.switchSprite('jumpRight')
+        }
+        else{
+            player.switchSprite('jumpLeft')
+        }    
     }
     else if(player.velocity.y > 0){
         player.switchSprite('fall')
@@ -256,11 +269,11 @@ function animate(){
     }
     // enemy jumping and falling
     if (enemy.velocity.y < 0 ){
-        if(enemy.velocity.x > 0){
+        if(enemy.directionRight){
             enemy.switchSprite('jumpRight')
         }
         else{
-            enemy.switchSprite('jump')
+            enemy.switchSprite('jumpLeft')
         }
     }
     else if (enemy.velocity.y > 0){
@@ -314,7 +327,7 @@ window.addEventListener('keydown', (event) => {
                 player.lastKey = 'a'
                 break
             case 'w':
-                player.velocity.y = -20
+                player.velocity.y = -15
                 keys.w.pressed = true
                 player.lastKey = 'w'
                 break
@@ -336,7 +349,7 @@ window.addEventListener('keydown', (event) => {
                 enemy.lastKey = 'ArrowLeft'
                 break
             case 'ArrowUp':
-                enemy.velocity.y = -20
+                enemy.velocity.y = -15
                 keys.ArrowUp.pressed = true
                 enemy.lastKey = 'ArrowUp'
                 break
