@@ -140,12 +140,12 @@ class Fighter extends Sprite {
 
 
         // drawing the attack box
-        c.fillStyle = 'red'
-        c.fillRect(this.attackBox.position.x, this.attackBox.position.y, 
-            this.attackBox.width,
-            this.attackBox.height)
+        //c.fillStyle = 'red'
+        //c.fillRect(this.attackBox.position.x, this.attackBox.position.y, 
+        //    this.attackBox.width,
+        //    this.attackBox.height)
 
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
         // movement 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
@@ -186,7 +186,12 @@ class Fighter extends Sprite {
             this.switchSprite('death')
         }
         else{
-            this.switchSprite('takeHit')
+            if(this.directionRight){
+                this.switchSprite('takeHitRight')
+            }
+            else{
+                this.switchSprite('takeHitLeft')
+            }
         }
     }
 
@@ -204,8 +209,12 @@ class Fighter extends Sprite {
         }
 
         // overriding when figher gets hit 
-        if(this.image === this.sprites.takeHit.image &&
-            this.framesCurrent < this.sprites.takeHit.framesMax - 1){
+        if(this.image === this.sprites.takeHitLeft.image &&
+            this.framesCurrent < this.sprites.takeHitLeft.framesMax - 1){
+                return
+        }
+        else if(this.image === this.sprites.takeHitRight.image &&
+            this.framesCurrent < this.sprites.takeHitRight.framesMax - 1){
                 return
         }
         
@@ -291,10 +300,17 @@ class Fighter extends Sprite {
                     this.framesCurrent = 0
                 }
                 break
-            case 'takeHit':
-                if(this.image != this.sprites.takeHit.image){
-                    this.image = this.sprites.takeHit.image
-                    this.framesMax = this.sprites.takeHit.framesMax
+            case 'takeHitRight':
+                if(this.image != this.sprites.takeHitRight.image){
+                    this.image = this.sprites.takeHitRight.image
+                    this.framesMax = this.sprites.takeHitRight.framesMax
+                    this.framesCurrent = 0
+                }
+                break
+            case 'takeHitLeft':
+                if(this.image != this.sprites.takeHitLeft.image){
+                    this.image = this.sprites.takeHitLeft.image
+                    this.framesMax = this.sprites.takeHitLeft.framesMax
                     this.framesCurrent = 0
                 }
                 break
