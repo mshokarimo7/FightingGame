@@ -97,7 +97,6 @@ class Fighter extends Sprite {
         this.directionRight = directionRight
         this.directionLeft = directionLeft
         this.isPlayer = isPlayer
-
         for(const sprite in this.sprites){
             sprites[sprite].image = new Image()
             sprites[sprite].image.src = sprites[sprite].imageSrc
@@ -105,7 +104,6 @@ class Fighter extends Sprite {
     }
 
     update(){
-        
         this.draw()
         if(!this.dead){
             this.animateFrames()
@@ -146,6 +144,7 @@ class Fighter extends Sprite {
         //    this.attackBox.height)
 
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+
         // movement 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
@@ -183,7 +182,12 @@ class Fighter extends Sprite {
         this.health -= 20
 
         if(this.health <= 0){
-            this.switchSprite('death')
+            if(this.directionRight){
+                this.switchSprite('deathRight')
+            }
+            else{
+                this.switchSprite('deathLeft')
+            }
         }
         else{
             if(this.directionRight){
@@ -219,10 +223,18 @@ class Fighter extends Sprite {
         }
         
         // overriding when fighter dies 
-        if(this.image === this.sprites.death.image ){
+        if(this.image === this.sprites.deathLeft.image ){
             /* making sure the death animation has finished before setting the 
             death boolean to true*/
-            if(this.framesCurrent === this.sprites.death.framesMax - 1){
+            if(this.framesCurrent === this.sprites.deathLeft.framesMax - 1){
+                this.dead = true
+            }
+            return
+        }
+        else if(this.image === this.sprites.deathRight.image ){
+            /* making sure the death animation has finished before setting the 
+            death boolean to true*/
+            if(this.framesCurrent === this.sprites.deathRight.framesMax - 1){
                 this.dead = true
             }
             return
@@ -314,15 +326,20 @@ class Fighter extends Sprite {
                     this.framesCurrent = 0
                 }
                 break
-            case 'death':
-                if(this.image != this.sprites.death.image){
-                    this.image = this.sprites.death.image
-                    this.framesMax = this.sprites.death.framesMax
+            case 'deathRight':
+                if(this.image != this.sprites.deathRight.image){
+                    this.image = this.sprites.deathRight.image
+                    this.framesMax = this.sprites.deathRight.framesMax
                     this.framesCurrent = 0
                 }
                 break
-
-
+            case 'deathLeft':
+                if(this.image != this.sprites.deathLeft.image){
+                    this.image = this.sprites.deathLeft.image
+                    this.framesMax = this.sprites.deathLeft.framesMax
+                    this.framesCurrent = 0
+                }
+                break
         }
     }
 }
