@@ -64,7 +64,7 @@ class Fighter extends Sprite {
     constructor({position, velocity, color = 'red', imageSrc, scale = 1, 
     framesMax = 1, offset = {x: 0, y: 0}, sprites,
     attackBox = {offset:{}, width: undefined, height: undefined},
-    directionRight, directionLeft}) {
+    directionRight, directionLeft, isPlayer}) {
         // calling the constructor of the parent i.e. Sprite
         super({
             position,
@@ -96,12 +96,12 @@ class Fighter extends Sprite {
         this.dead = false
         this.directionRight = directionRight
         this.directionLeft = directionLeft
+        this.isPlayer = isPlayer
 
         for(const sprite in this.sprites){
             sprites[sprite].image = new Image()
             sprites[sprite].image.src = sprites[sprite].imageSrc
         }
-        console.log(this.sprites)
     }
 
     update(){
@@ -111,16 +111,41 @@ class Fighter extends Sprite {
             this.animateFrames()
         }
 
-        // making sure the attack boxes are following their parent (i.e. player)
-        this.attackBox.position.x = this.position.x + this.attackBox.offset.x
-        this.attackBox.position.y = this.position.y + this.attackBox.offset.y 
+        // making sure the attack boxes are following their parent (i.e. fighter)
+        if(this.directionRight){
+            // changing attack box for player
+            if(this.isPlayer){
+                this.attackBox.position.x = this.position.x + this.attackBox.offset.x
+                this.attackBox.position.y = this.position.y + this.attackBox.offset.y
+            }
+            // changing attack box for enemy
+            else{
+                this.attackBox.position.x = this.position.x + this.attackBox.offset.x - 15
+                this.attackBox.position.y = this.position.y + this.attackBox.offset.y
+            }  
+        }
+        else{
+            // changing attack box for player
+            if(this.isPlayer){
+                this.attackBox.position.x = this.position.x - this.attackBox.offset.x - 100
+                this.attackBox.position.y = this.position.y + this.attackBox.offset.y
+            }
+            // changing attack box for enemy
+            else{
+                this.attackBox.position.x = this.position.x + this.attackBox.offset.x - 265
+                this.attackBox.position.y = this.position.y + this.attackBox.offset.y
+            
+            }
+        }
+
 
         // drawing the attack box
-        /*c.fillRect(this.attackBox.position.x, this.attackBox.position.y, 
+        c.fillStyle = 'red'
+        c.fillRect(this.attackBox.position.x, this.attackBox.position.y, 
             this.attackBox.width,
-            this.attackBox.height)*/
+            this.attackBox.height)
 
-
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
         // movement 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
@@ -238,10 +263,17 @@ class Fighter extends Sprite {
                     this.framesCurrent = 0
                 }
                 break
-            case 'fall':
-                if(this.image != this.sprites.fall.image){
-                    this.image = this.sprites.fall.image
-                    this.framesMax = this.sprites.fall.framesMax
+            case 'fallRight':
+                if(this.image != this.sprites.fallRight.image){
+                    this.image = this.sprites.fallRight.image
+                    this.framesMax = this.sprites.fallRight.framesMax
+                    this.framesCurrent = 0
+                }
+                break
+            case 'fallLeft':
+                if(this.image != this.sprites.fallLeft.image){
+                    this.image = this.sprites.fallLeft.image
+                    this.framesMax = this.sprites.fallLeft.framesMax
                     this.framesCurrent = 0
                 }
                 break

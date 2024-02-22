@@ -35,7 +35,7 @@ const player = new Fighter(
         imageSrc: "./img/samuraiMack/IdleRight.png",
         framesMax: 8,
         scale: 2.5,
-        offset: {x: 215, y: 155},
+        offset: {x: 225, y: 155},
         sprites: {
             idleRight: {
                 imageSrc: "./img/samuraiMack/IdleRight.png",
@@ -61,8 +61,12 @@ const player = new Fighter(
                 imageSrc: "./img/samuraiMack/JumpLeft.png",
                 framesMax: 2
             },
-            fall: {
-                imageSrc: "./img/samuraiMack/Fall.png",
+            fallRight: {
+                imageSrc: "./img/samuraiMack/FallRight.png",
+                framesMax: 2
+            },
+            fallLeft: {
+                imageSrc: "./img/samuraiMack/FallLeft.png",
                 framesMax: 2
             },
             AttackRight: {
@@ -83,12 +87,13 @@ const player = new Fighter(
             }
         },
         attackBox: {
-            offset: {x: 100, y: 50},
+            offset: {x: 90, y: 50},
             width: 150,
             height: 50
         },
         directionRight: true,
-        directionLeft: false
+        directionLeft: false,
+        isPlayer: true
     }  
 )
 
@@ -100,7 +105,7 @@ const enemy = new Fighter(
         imageSrc: "./img/kenji/IdleLeft.png",
         framesMax: 4,
         scale: 2.5,
-        offset: {x: 215, y: 170},
+        offset: {x: 225, y: 170},
         sprites: {
             idleLeft: {
                 imageSrc: "./img/kenji/IdleLeft.png",
@@ -126,8 +131,12 @@ const enemy = new Fighter(
                 imageSrc: "./img/kenji/JumpLeft.png",
                 framesMax: 2
             },
-            fall: {
-                imageSrc: "./img/kenji/Fall.png",
+            fallRight: {
+                imageSrc: "./img/kenji/FallRight.png",
+                framesMax: 2
+            },
+            fallLeft: {
+                imageSrc: "./img/kenji/FallLeft.png",
                 framesMax: 2
             },
             AttackRight: {
@@ -148,12 +157,13 @@ const enemy = new Fighter(
             }
         },
         attackBox: {
-            offset: {x: -165,y: 50},
+            offset: {x: 90, y: 50},
             width: 150,
             height: 50
         },
         directionRight: false,
-        directionLeft: true
+        directionLeft: true,
+        isPlayer: false
     }
 )
 
@@ -236,7 +246,12 @@ function animate(){
         }    
     }
     else if(player.velocity.y > 0){
-        player.switchSprite('fall')
+        if(player.directionRight){
+            player.switchSprite('fallRight')
+        }
+        else{
+            player.switchSprite('fallLeft')
+        }
     }
     
     // enemy movement------------------------------------------------
@@ -277,7 +292,12 @@ function animate(){
         }
     }
     else if (enemy.velocity.y > 0){
-        enemy.switchSprite('fall')
+        if(enemy.directionRight){
+            enemy.switchSprite('fallRight')
+        }
+        else{
+            enemy.switchSprite('fallLeft')
+        }
     }
 
     // detecting attack collisions, PLAYER on ENEMY; and enemy gets hit----------------
