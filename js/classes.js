@@ -63,8 +63,8 @@ class Sprite {
 class Fighter extends Sprite {
     constructor({position, velocity, color = 'red', imageSrc, scale = 1, 
     framesMax = 1, offset = {x: 0, y: 0}, sprites,
-    attackBox = {offset:{}, width: undefined, height: undefined}
-    }) {
+    attackBox = {offset:{}, width: undefined, height: undefined},
+    directionRight, directionLeft}) {
         // calling the constructor of the parent i.e. Sprite
         super({
             position,
@@ -94,6 +94,8 @@ class Fighter extends Sprite {
         this.framesHold = 5
         this.sprites = sprites
         this.dead = false
+        this.directionRight = directionRight
+        this.directionLeft = directionLeft
 
         for(const sprite in this.sprites){
             sprites[sprite].image = new Image()
@@ -133,7 +135,7 @@ class Fighter extends Sprite {
     }
 
     enemyAttack(){
-        if(this.velocity.x > 0){
+        if(this.directionRight){
             this.switchSprite('AttackRight')
         }
         else {
@@ -143,7 +145,7 @@ class Fighter extends Sprite {
     }
 
     playerAttack(){
-        if(this.velocity.x < 0){
+        if(this.directionRight){
             this.switchSprite('AttackRight')
         }
         else {
@@ -194,17 +196,31 @@ class Fighter extends Sprite {
 
         // regular animation states 
         switch(sprite){
-            case 'idle':
-                if(this.image !== this.sprites.idle.image){
-                    this.image = this.sprites.idle.image
-                    this.framesMax = this.sprites.idle.framesMax
+            case 'idleRight':
+                if(this.image !== this.sprites.idleRight.image){
+                    this.image = this.sprites.idleRight.image
+                    this.framesMax = this.sprites.idleRight.framesMax
                     this.framesCurrent = 0
                 }
                 break
-            case 'run':
-                if(this.image != this.sprites.run.image){
-                    this.image = this.sprites.run.image
-                    this.framesMax = this.sprites.run.framesMax
+            case 'idleLeft':
+                if(this.image !== this.sprites.idleLeft.image){
+                    this.image = this.sprites.idleLeft.image
+                    this.framesMax = this.sprites.idleLeft.framesMax
+                    this.framesCurrent = 0
+                }
+                break
+            case 'runRight':
+                if(this.image != this.sprites.runRight.image){
+                    this.image = this.sprites.runRight.image
+                    this.framesMax = this.sprites.runRight.framesMax
+                    this.framesCurrent = 0
+                }
+                break
+            case 'runLeft':
+                if(this.image != this.sprites.runLeft.image){
+                    this.image = this.sprites.runLeft.image
+                    this.framesMax = this.sprites.runLeft.framesMax
                     this.framesCurrent = 0
                 }
                 break
@@ -229,6 +245,13 @@ class Fighter extends Sprite {
                     this.framesCurrent = 0
                 }
                 break
+            case 'AttackRight':
+                if(this.image != this.sprites.AttackRight.image){
+                    this.image = this.sprites.AttackRight.image
+                    this.framesMax = this.sprites.AttackRight.framesMax
+                    this.framesCurrent = 0
+                }
+                break
             case 'takeHit':
                 if(this.image != this.sprites.takeHit.image){
                     this.image = this.sprites.takeHit.image
@@ -243,20 +266,8 @@ class Fighter extends Sprite {
                     this.framesCurrent = 0
                 }
                 break
-            case 'runRight':
-                if(this.image != this.sprites.runRight.image){
-                    this.image = this.sprites.runRight.image
-                    this.framesMax = this.sprites.runRight.framesMax
-                    this.framesCurrent = 0
-                }
-                break
-            case 'AttackRight':
-                if(this.image != this.sprites.AttackRight.image){
-                    this.image = this.sprites.AttackRight.image
-                    this.framesMax = this.sprites.AttackRight.framesMax
-                    this.framesCurrent = 0
-                }
-                break
+
+
         }
     }
 }

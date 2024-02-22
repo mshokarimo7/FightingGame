@@ -32,17 +32,25 @@ const player = new Fighter(
         velocity: {x: 0, y: 0},
         color: 'red',
         offset: {x: 0, y: 0},
-        imageSrc: "./img/samuraiMack/Idle.png",
+        imageSrc: "./img/samuraiMack/IdleRight.png",
         framesMax: 8,
         scale: 2.5,
         offset: {x: 215, y: 155},
         sprites: {
-            idle: {
-                imageSrc: "./img/samuraiMack/Idle.png",
+            idleRight: {
+                imageSrc: "./img/samuraiMack/IdleRight.png",
                 framesMax: 8
             },
-            run: {
-                imageSrc: "./img/samuraiMack/Run.png",
+            idleLeft: {
+                imageSrc: "./img/samuraiMack/IdleLeft.png",
+                framesMax: 8
+            },
+            runRight: {
+                imageSrc: "./img/samuraiMack/RunRight.png",
+                framesMax: 8
+            },
+            runLeft: {
+                imageSrc: "./img/samuraiMack/RunLeft.png",
                 framesMax: 8
             },
             jump: {
@@ -74,7 +82,9 @@ const player = new Fighter(
             offset: {x: 100, y: 50},
             width: 150,
             height: 50
-        }
+        },
+        directionRight: true,
+        directionLeft: false
     }  
 )
 
@@ -83,17 +93,25 @@ const enemy = new Fighter(
         position: {x: 350, y: 100},
         velocity: {x: 0, y: 0},
         color: 'blue',
-        imageSrc: "./img/kenji/Idle.png",
+        imageSrc: "./img/kenji/IdleLeft.png",
         framesMax: 4,
         scale: 2.5,
         offset: {x: 215, y: 170},
         sprites: {
-            idle: {
-                imageSrc: "./img/kenji/Idle.png",
+            idleLeft: {
+                imageSrc: "./img/kenji/IdleLeft.png",
                 framesMax: 4
             },
-            run: {
-                imageSrc: "./img/kenji/Run.png",
+            idleRight: {
+                imageSrc: "./img/kenji/IdleRight.png",
+                framesMax: 4
+            },
+            runRight: {
+                imageSrc: "./img/kenji/RunRight.png",
+                framesMax: 8
+            },
+            runLeft: {
+                imageSrc: "./img/kenji/RunLeft.png",
                 framesMax: 8
             },
             jump: {
@@ -119,18 +137,15 @@ const enemy = new Fighter(
             death: {
                 imageSrc: "./img/kenji/Death.png",
                 framesMax: 7
-            },
-            // Animations for right side
-            runRight: {
-                imageSrc: "./img/kenji/RunRight.png",
-                framesMax: 8
             }
         },
         attackBox: {
             offset: {x: -165,y: 50},
             width: 150,
             height: 50
-        }
+        },
+        directionRight: false,
+        directionLeft: true
     }
 )
 
@@ -176,43 +191,31 @@ function animate(){
 
     // player movement----------------------------------------------
     player.velocity.x = 0
-    /*
-    switch(true){
-        case keys.a.pressed:
-            player.velocity.x = -5;
-            player.switchSprite('run');
-            if (player.dead) {
-                player.velocity.x = 0;
-            }
-            break;
-        case keys.d.pressed:
-            player.velocity.x = 5;
-            player.switchSprite('run');
-            if (player.dead) {
-                player.velocity.x = 0;
-            }
-            break;
-        default:
-            player.switchSprite('idle')
-    }
-    */
-    
     if(keys.a.pressed && !keys.d.pressed){
         player.velocity.x = -5
-        player.switchSprite('run')
+        player.switchSprite('runLeft')
+        player.directionLeft = true
+        player.directionRight = false
         if(player.dead){
             player.velocity.x = 0
         }
     }
     else if(keys.d.pressed && !keys.a.pressed){
         player.velocity.x = 5
-        player.switchSprite('run')
+        player.switchSprite('runRight')
+        player.directionLeft = false
+        player.directionRight = true
         if(player.dead){
             player.velocity.x = 0
         }
     }
     else{
-        player.switchSprite('idle')
+        if (player.directionRight){
+            player.switchSprite('idleRight')
+        }
+        else{
+            player.switchSprite('idleLeft')
+        }
     }
     
     // jumping and falling
@@ -227,7 +230,9 @@ function animate(){
     enemy.velocity.x = 0
     if(keys.ArrowLeft.pressed && !keys.ArrowRight.pressed){
         enemy.velocity.x = -5
-        enemy.switchSprite('run')
+        enemy.switchSprite('runLeft')
+        enemy.directionLeft = true
+        enemy.directionRight = false
         if(enemy.dead){
             enemy.velocity.x = 0
         }
@@ -235,12 +240,19 @@ function animate(){
     else if(keys.ArrowRight.pressed && !keys.ArrowLeft.pressed){
         enemy.velocity.x = 5
         enemy.switchSprite('runRight')
+        enemy.directionLeft = false
+        enemy.directionRight = true
         if(enemy.dead){
             enemy.velocity.x = 0
         }
     }
     else{
-        enemy.switchSprite('idle')
+        if(enemy.directionRight){
+            enemy.switchSprite('idleRight')
+        }
+        else{
+            enemy.switchSprite('idleLeft')
+        }
     }
     // enemy jumping and falling
     if (enemy.velocity.y < 0 ){
